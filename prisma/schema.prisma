@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  accounts      Account[]
+  sales         Venda[]
+
+  role UserRole @default(USER)
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Venda {
+  id          String        @id @default(cuid())
+  products    VendaProduto[] // Relacionamento com a tabela intermediária
+  price       Float
+  frete       Float
+  totalAmount Float         @default(0.0)
+  saleDate    DateTime      @default(now())
+  status      String        @default("pending") // Pode ser "pending" (solicitação) ou "completed" (venda concluída)
+  sellerId    String
+  seller      User          @relation(fields: [sellerId], references: [id])
+  buyer       String
+
+  @@map("sales") // Mapeia o modelo Venda para a tabela "sales"
+}
+
+model Produto {
+  id               Int            @id @default(autoincrement())
+  SKU              String         @unique
+  produto          String
+  preco_cheio      Float
+  preco_descontado Float
+  vendas           VendaProduto[] // Relacionamento com a tabela intermediária
+
+  @@map("products") // Mapeia o modelo Produto para a tabela "products"
+}
+
+model VendaProduto {
+  vendaId          String
+  produtoId        Int
+  quantidade       Int
+  precoUnitario    Float
+
+  venda            Venda          @relation(fields: [vendaId], references: [id])
+  produto          Produto        @relation(fields: [produtoId], references: [id])
+
+  @@id([vendaId, produtoId]) // Composição da chave primária
+  @@map("sales_products") // Mapeia o modelo VendaProduto para a tabela "sales_products"
+}
