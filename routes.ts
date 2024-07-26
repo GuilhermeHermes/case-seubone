@@ -18,6 +18,11 @@ export const authRoutes = [
 
 ]
 
+export const adminRoutes = [
+    "/users",
+    "/request"
+]
+
 /**
  * O prefixo pras rotas de autenticação da API
  * Rotas que startar com esse prefixo são usadas para os processos de autenticação da API
@@ -25,4 +30,4 @@ export const authRoutes = [
  */
 export const apiAuthPrefix = "/api/auth"
 
-export const DEFAULT_LOGIN_REDIRECT = "/settings"
+export const DEFAULT_LOGIN_REDIRECT = "/vendas"

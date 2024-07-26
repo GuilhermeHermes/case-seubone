@@ -42,3 +42,15 @@ export const deleteUser = async (id: string) => {
      return null
  }
      }
+
+
+export const getUserRole = async (id: string) => {
+    try{ 
+    const user = await prisma.user.findUnique({where: {id} });
+    return user?.role;
+     
+ }catch(e){
+    console.log(e)
+     return null
+ }
+     }

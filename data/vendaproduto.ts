@@ -1,27 +1,38 @@
-// vendaProdutoActions.ts
-import { PrismaClient } from '@prisma/client';
+'use server'
+import { prisma } from '@/lib/db';
+import { getProdutoBySku } from './produto';
 
-const prisma = new PrismaClient();
+
 
 // Associação de Produtos a uma Venda
-export async function addProdutosToVenda(vendaId: string, produtos: { produtoId: number; quantidade: number; precoUnitario: number; }[]) {
-  //TODO: verificar se o produto existe
-  const promises = produtos.map(produto =>
-    prisma.vendaProduto.create({
-      data: {
-        vendaId: vendaId,
-        produtoId: produto.produtoId,
-        quantidade: produto.quantidade,
-        precoUnitario: produto.precoUnitario,
-      },
-    })
-  );
-  const result = await Promise.all(promises);
-  return result;
+export async function adicionarProdutoAVenda(vendaId: string, produto: {SKU: string, quantidade: number, precoUnitario: number, produtoId: string}) {
+  // Encontra a venda existente
+  const venda = await prisma.venda.findUnique({ where: { id: vendaId } });
+
+  // Verifica se a venda existe
+  if (!venda) {
+    throw new Error('Venda não encontrada');
+  }
+
+  
+  const novoProdutoVenda = await prisma.vendaProduto.create({
+    data: {
+      vendaId,
+      produtoId: produto.produtoId, // Add the produtoId property here
+      produtoSKU: produto.SKU,
+      quantidade: produto.quantidade,
+      precoUnitario: produto.precoUnitario,
+    },
+  });
+
+  // Atualiza o valor total da venda (se necessário)
+  // ... (código similar ao anterior)
+
+  return novoProdutoVenda;
 }
 
 // Exclusão de Produtos de uma Venda
-export async function removeProdutoFromVenda(vendaId: string, produtoId: number) {
+export async function removeProdutoFromVenda(vendaId: string, produtoId: string) {
   const vendaProduto = await prisma.vendaProduto.delete({
     where: {
       vendaId_produtoId: {

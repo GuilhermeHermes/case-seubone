@@ -1,143 +1,48 @@
+
 import { auth } from '@/auth';
-import SalesCreateCard from '@/components/card-vendas';
 import { Venda, columns } from "./columns"
 import { DataTable } from "./data-table"
 import CreateVendas from './create-venda';
 import FilterBar from './filter-bar';
-
-async function getData(): Promise<Venda[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      seller: 'João',
-      amount: 100,
-      status: "Pendente",
-      cliente: "Cleiton Rasta miguelito suarez comercio e raçoes LTDA @CIA",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-    {
-      id: "1f3ed52f",
-      seller: 'Casimiro',
-      amount: 1500,
-      status: "Confirmado",
-      cliente: "Miguelito",
-    },
-
-  ]
-}
-
+import { getAllVendas, getVendasByUser } from '@/data/venda';
+import { getUserById } from '@/data/user';
+import { CurrentUser } from '@/lib/auth';
 
 const SalesPage = async () => {
-    const session = await auth()
-    const data = await getData()
-
-    return (  
-        <div className='flex flex-col justify-center items-center'>
+  const user = await CurrentUser();
+  let vendas; // Declare the 'vendas' variable here
+  
+  if (user?.role === 'USER') {
+      vendas = await getVendasByUser(user?.id || ''); // Await the promise here
+  } else {
+      vendas = await getAllVendas(); // Await the promise here
+  }
+  
+  const data = await Promise.all(vendas?.map(async (venda: Venda) => {
+    const vendedor = await getUserById(venda.sellerId ?? '');
+    return {
+        id: venda.id,
+        totalAmount: venda.totalAmount,
+        status: venda.status,
+        buyer: venda.buyer,
+        saleDate: venda.saleDate,
+        sellerId: venda.sellerId,
+        discount: venda.discount,
+        maxDiscount: venda.maxDiscount,
+        frete: venda.frete,
+        sellerName: vendedor?.name ?? ''// Add the 'vendedor' property here
+    };
+}) ?? []);
+  
+  return (  
+      <div className='flex flex-col justify-center items-center'>
           <div className='flex mt-2'>
-            <FilterBar/>
-          <CreateVendas/>
+              <FilterBar/>
+              <CreateVendas idSeller={user?.id ?? ''}/>
           </div>
-           <DataTable columns={columns} data={data} />
-        </div>
-    );
+          <DataTable columns={columns} data={data} />
+      </div>
+  );
 };
 
 export default SalesPage;

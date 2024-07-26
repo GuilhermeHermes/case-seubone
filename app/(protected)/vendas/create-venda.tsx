@@ -3,9 +3,14 @@
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MdAttachMoney } from "react-icons/md";
-import Modal from './modal-vendas';
+import Modal from './modal-create-vendas';
 
-const CreateVendas = () => {
+interface Props {
+  idSeller: string;
+}
+
+const CreateVendas = ({ idSeller }: Props) => {
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const isModalOpen = searchParams.get('modal') === 'true';
@@ -27,7 +32,7 @@ const CreateVendas = () => {
         <MdAttachMoney />
         Adicionar venda
       </button>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <Modal idSeller={idSeller} isOpen={isModalOpen} onClose={handleCloseModal} />
     </>
   );
 };

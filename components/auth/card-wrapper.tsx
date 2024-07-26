@@ -14,7 +14,9 @@ interface CardWrapperProps {
     headerLabel: string;
     backButtonlabel: string;
     backButtonHref: string;
+    BaseOrDark?: string;
     showSocial?: boolean;
+    width?: string;
 };
 
 
@@ -24,12 +26,14 @@ export const CardWrapper = ({
     headerLabel,
     backButtonlabel,
     backButtonHref,
-    showSocial = false
+    BaseOrDark,
+    showSocial = false,
+    width,
 }: CardWrapperProps) => {
     return(
-        <Card className="w-[500px] shadow-md flex flex-col ">
+        <Card className={`shadow-md flex flex-col ${width}`} >
             <CardHeader>
-                <Header label={headerLabel} title={headerTitle}/>
+                <Header  BaseOrDark={BaseOrDark ?? ''} label={headerLabel} title={headerTitle}/>
             </CardHeader>
             <CardContent>
             {children}

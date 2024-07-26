@@ -22,15 +22,22 @@ export async function createProduto(data: {
 }
 
 // Leitura de um Produto
-export async function getProdutoById(produtoId: number) {
+export async function getProdutoById(produtoId: string) {
   const produto = await prisma.produto.findUnique({
-    where: { id: produtoId },
+    where: { id: produtoId.toString() },
+  });
+  return produto;
+}
+
+export async function getProdutoBySku(produtoSKU: string) {
+  const produto = await prisma.produto.findUnique({
+    where: { SKU: produtoSKU },
   });
   return produto;
 }
 
 // Atualização de um Produto
-export async function updateProduto(produtoId: number, updates: Partial<{
+export async function updateProduto(produtoId: string, updates: Partial<{
   SKU: string;
   produto: string;
   preco_cheio: number;
@@ -44,7 +51,7 @@ export async function updateProduto(produtoId: number, updates: Partial<{
 }
 
 // Exclusão de um Produto
-export async function deleteProduto(produtoId: number) {
+export async function deleteProduto(produtoId: string) {
   const produto = await prisma.produto.delete({
     where: { id: produtoId },
   });

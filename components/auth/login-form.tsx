@@ -19,7 +19,7 @@ import { CardWrapper } from "@/components/auth/card-wrapper"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
 import { login } from "@/actions/login"
-
+import Image from 'next/image';
 
 
 
@@ -44,13 +44,19 @@ export const LoginForm = () => {
   })
   }
 
-  return (
+  return  (
+    <div className="flex justify-center items-center">
+  <div className="flex  bg-transparent shadow-lg">
+    <div className="w-2/3 p-8">
+    <Image src="/assets/illustration.png" alt="Coffee" width={400} height={300} />
+    </div>
     <CardWrapper
       headerLabel="Welcome back"
-      headerTitle="🔐Login"
+      headerTitle="Login"
       backButtonlabel="Don't have an account?"
       backButtonHref="/auth/register"
       showSocial
+      width="w-[800px]"
     >
        <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}
@@ -63,7 +69,7 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                <Input {...field} placeholder="johndoe@exampel.com" type="email" disabled={isPending} />
+                <Input {...field} placeholder="johndoe@example.com" type="email" disabled={isPending} />
                 </FormControl>
                 <FormMessage/>
                 </FormItem>)
@@ -84,11 +90,13 @@ export const LoginForm = () => {
             />
           </div>
           <FormError message={errorMessage || ''} />
-          <Button type="submit" size="lg" className="w-full" disabled={isPending}>
+          <Button variant='outline' type="submit" size="lg" className="w-full" disabled={isPending}>
             Login
           </Button>
         </form>
        </Form>
     </CardWrapper>
+      </div>
+    </div>
   )
 }

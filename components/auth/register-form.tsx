@@ -21,7 +21,7 @@ import {FormSuccess} from "@/components/form-success"
 import {register} from "@/actions/register";
 import { useRouter } from "next/navigation";
 import { startTransition, useState, useTransition } from "react";
-
+import Image from 'next/image';
 
 
 export const RegisterForm = () => {
@@ -50,13 +50,18 @@ export const RegisterForm = () => {
   
 
   return (
+    <div className="flex justify-center items-center">
+  <div className="flex  bg-transparent shadow-lg">
+    <div className="w-2/3 p-8">
+    <Image src="/assets/illustration.png" alt="Coffee" width={400} height={300} />
+    </div>
     <CardWrapper
     headerTitle="Register"
     headerLabel="Welcome back"
     backButtonlabel="Already have an account?"
     backButtonHref="/auth/login"
     showSocial
-
+    width="w-[500px]"
   >
      <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}
@@ -110,6 +115,8 @@ export const RegisterForm = () => {
       </form>
      </Form>
   </CardWrapper>
+  </div>
+  </div>
   );
 }
 
