@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { RegisterForm } from './register-form'; // Certifique-se de ajustar o caminho se necessário
+import { SellerForm } from './seller-form';
 
 const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   if (!isOpen) return null;
@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
         onClick={onClose}
       />
       <div className="relative bg-transparent p-2 rounded-lg shadow-lg w-full max-w-lg">
-        <RegisterForm />
+        <SellerForm />
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
