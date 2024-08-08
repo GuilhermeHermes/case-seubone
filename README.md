@@ -2,7 +2,7 @@
 Sistema que separa gerentes e vendedores e realiza a gerencia das vendas de uma empresa.
 
 
-# Tecnologias utilizadas
+# Technologies
 - NextJS
 - Prisma
 - PostgreSQL
@@ -15,3 +15,12 @@ Sistema que separa gerentes e vendedores e realiza a gerencia das vendas de uma 
 - react hooks
 - zod e react hook form para formulários
 - actions via server e via client.
+
+
+project created with create-next-app
+
+how to run:
+```
+  npm i
+  npm run dev
+```
