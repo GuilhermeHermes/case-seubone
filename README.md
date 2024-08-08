@@ -13,8 +13,7 @@ Sistema que separa gerentes e vendedores e realiza a gerencia das vendas de uma 
 - Singleton
 - middlewares
 - react hooks
-- zod e react hook form para formulários
-- actions via server e via client.
+
 
 
 project created with create-next-app
